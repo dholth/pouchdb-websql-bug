@@ -1,0 +1,19 @@
+<!doctype html>
+<script src="jquery.min.js"></script>
+<script src="pouchdb.js"></script>
+<script src="pouchdb.load.js"></script>
+<script src="loaddb.js"></script>
+<body>
+<h1>Loading database...</h1>
+<p id="info"></p>
+<h2>WebSQL</h2>
+<p>
+<a onclick="load(batches[0], db1)">Load WebSQL</a>
+<p>
+<a onclick="db1.destroy().then(function() { showInfo(db1); })">Destroy</a>
+<h2>IndexedDB</h2>
+<p>
+<a onclick="load(batches[0], db2)">Load IndexedDB</a>
+<p>
+<a onclick="db2.destroy().then(function() { showInfo(db2); })">Destroy</a>
+</body>
