@@ -1,9 +1,9 @@
-/*global PouchDB, Promise, document */
+/*global PouchDB, Promise, document, console */
 /*
  * Populate PouchDB with a few directly fetched test documents.
  *
- * This is the last file of one database dump, and all the files from a second 
- * database dump. IndexedDB winds up with the correct number of documents. 
+ * This is the last file of one database dump, and all the files from a second
+ * database dump. IndexedDB winds up with the correct number of documents.
  * Chrome WebSQL winds up with too many. Hopefully this WebSQL bug is related
  * to the real problem we are having.
  */
@@ -40,6 +40,24 @@ function showInfo(db) {
   db.info().then(function(info) {
       $('#info').append("<p id='done'>Have " + info.doc_count + " documents in " + db._name + "</p>");
   });
+}
+
+function compareDatabases(db1, db2) {
+  function rowsToSet(result) {
+    return new Set(result.rows.map(function(doc) {return doc.id;}));
+  }
+
+  return Promise.all([db1.allDocs().then(rowsToSet), db2.allDocs().then(rowsToSet)])
+    .then(function(maps) {
+      var diff = new Set();
+      for(var key of maps[0]) {
+        if(!maps[1].has(key)) { diff.add(key); }
+      }
+      return diff;
+    }).then(function(diff) {
+      console.log(diff);
+      return diff;
+    });
 }
 
 $(document).ready(function() {
