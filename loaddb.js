@@ -67,6 +67,14 @@ $(document).ready(function() {
   showInfo(db2);
 });
 
+function loadMinimum(db) {
+  $.ajax('websql-bug.json').then(function (docs) {
+    docs.forEach(function(doc) {
+      db.bulkDocs(doc, {new_edits: false});
+    });
+  });
+}
+
 function load(batch, db) {
   Promise.all(batch.map(function (dumpFile) {
     return db.load('./' + dumpFile);
